@@ -10,7 +10,7 @@
         /* --- Styles Restored from 'Fixed' Version --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #F9FAFB;
+            background-color: #F9FAFB; /* Warm neutral background */
             color: #1F2937;
         }
         
@@ -26,17 +26,19 @@
 
         .timeline-node {
             transition: all 0.3s ease;
-            color: #64748B;
+            color: #64748B; /* Default Slate-500 */
         }
         
+        /* Force White Text on Active State */
         .timeline-node.active {
-            background-color: #1E3A8A !important;
+            background-color: #1E3A8A !important; 
             color: white !important;
             transform: scale(1.1);
             border-color: #1E3A8A;
             box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.3);
         }
         
+        /* Target the spans inside to ensure they turn white too */
         .timeline-node.active span {
             color: white !important;
         }
@@ -166,9 +168,9 @@
             </div>
         </div>
         <!-- Decorative bg block -->
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-slate-50 flex items-center justify-center border-l border-slate-100">
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-slate-100 flex items-center justify-center border-l border-slate-100">
             <div class="p-8 text-center w-full max-w-lg">
-                <!-- Corrected layout for Noise vs Experience -->
+                <!-- Title layout preserved as requested -->
                 <h3 class="text-2xl font-bold text-slate-400 mb-4">The "Noise" vs. The Experience</h3>
                 <div class="chart-container" style="max-height: 300px;">
                     <canvas id="noiseVsSignalChart"></canvas>
@@ -193,19 +195,20 @@
                 <!-- Connecting Line -->
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 transform -translate-y-1/2 rounded"></div>
                 
+                <!-- Updated Buttons: Removed inline text color so active state works -->
                 <button onclick="setPhase(0)" id="btn-phase-0" class="timeline-node active flex flex-col items-center group bg-white border-4 border-slate-200 rounded-full w-24 h-24 justify-center shadow-sm cursor-pointer hover:border-blue-400">
                     <span class="text-2xl font-bold mb-1">01</span>
-                    <span class="text-xs font-semibold uppercase tracking-wide">Recruit</span>
+                    <span class="text-xs font-semibold uppercase">Recruit</span>
                 </button>
                 
                 <button onclick="setPhase(1)" id="btn-phase-1" class="timeline-node flex flex-col items-center group bg-white border-4 border-slate-200 rounded-full w-24 h-24 justify-center shadow-sm cursor-pointer hover:border-blue-400">
                     <span class="text-2xl font-bold mb-1">02</span>
-                    <span class="text-xs font-semibold uppercase tracking-wide">Move-In</span>
+                    <span class="text-xs font-semibold uppercase">Move-In</span>
                 </button>
                 
                 <button onclick="setPhase(2)" id="btn-phase-2" class="timeline-node flex flex-col items-center group bg-white border-4 border-slate-200 rounded-full w-24 h-24 justify-center shadow-sm cursor-pointer hover:border-blue-400">
                     <span class="text-2xl font-bold mb-1">03</span>
-                    <span class="text-xs font-semibold uppercase tracking-wide">Grad</span>
+                    <span class="text-xs font-semibold uppercase">Grad</span>
                 </button>
             </div>
 
@@ -767,7 +770,55 @@
                             barPercentage: 0.5
                         }]
                     },
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: true }, y: { grid: { display: false } } } }
+                    options: { 
+                        indexAxis: 'y', 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        // Fix for Tooltip Title
+                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
+                                        // The 'label' property of context comes from x-axis ticks
+                                        // but for 'indexAxis: y', the x-axis is numeric (0-7).
+                                        // We need to map the numeric value back to month string.
+                                        // However, standard tooltip title is usually the Y-axis label (Category).
+                                        // The label we want to customize is the X-axis value shown in the body.
+                                        return context[0].label;
+                                    },
+                                    label: function(context) {
+                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        // context.parsed.x gives the numeric value
+                                        // Map start and end values to months
+                                        const start = months[context.parsed._custom.start];
+                                        const end = months[context.parsed._custom.end];
+                                        return label + start + ' - ' + end;
+                                    }
+                                }
+                            }
+                        }, 
+                        scales: { 
+                            x: { 
+                                display: true,
+                                min: 0,
+                                max: 7,
+                                ticks: {
+                                    stepSize: 1, // Force integers so callback works
+                                    callback: function(value) {
+                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
+                                        return months[value] || '';
+                                    }
+                                }
+                            }, 
+                            y: { grid: { display: false } } 
+                        } 
+                    }
                 });
             } else if (index === 1) {
                 mainPhaseChart = new Chart(ctx, {
@@ -854,7 +905,7 @@
                         borderColor: '#1E3A8A',
                         backgroundColor: '#1E3A8A',
                         borderWidth: 3,
-                        pointRadius: 0
+                        pointRadius: 4  // RESTORED: Points are now visible
                     }, {
                         label: 'Noise',
                         data: [20, 90, 20, 15, 10, 5],
