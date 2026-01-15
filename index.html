@@ -10,7 +10,7 @@
         /* --- Styles Restored from 'Fixed' Version --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #F9FAFB; /* Warm neutral background */
+            background-color: #F9FAFB;
             color: #1F2937;
         }
         
@@ -21,33 +21,91 @@
         }
         
         @media (min-width: 768px) {
-            .chart-container { height: 350px; } /* Slightly taller for visibility */
+            .chart-container { height: 350px; }
         }
 
         .timeline-node {
             transition: all 0.3s ease;
-            color: #64748B; /* Default Slate-500 */
+            color: #64748B;
         }
         
         .timeline-node.active {
-            background-color: #1E3A8A !important; /* Blue-900 force override */
-            color: white !important; /* Force white text */
+            background-color: #1E3A8A !important;
+            color: white !important;
             transform: scale(1.1);
             border-color: #1E3A8A;
             box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.3);
         }
         
-        /* Ensure the sub-text in buttons also turns white */
         .timeline-node.active span {
             color: white !important;
         }
 
+        /* --- Product Card & Modal Styles --- */
         .product-card {
             transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
         }
+        
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Hover Overlay */
+        .card-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 12rem; /* Matches image height */
+            background: rgba(30, 58, 138, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+
+        .product-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-backdrop.open .modal-content {
+            transform: scale(1);
         }
 
         /* Range Slider Styling */
@@ -56,7 +114,6 @@
             border-radius: 5px;
         }
         
-        /* Clean Text Utility */
         .text-clean {
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
@@ -200,7 +257,7 @@
         </div>
     </section>
 
-    <!-- Strategic Impact Section (Data Visualization) -->
+    <!-- Strategic Impact Section -->
     <section id="impact" class="py-16 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-12">
@@ -213,8 +270,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <!-- Column 1: Calculators -->
                 <div class="space-y-8">
-                    
-                    <!-- Calculator 1: Aggregate -->
+                    <!-- Calculator 1 -->
                     <div class="bg-slate-50 rounded-xl p-8 border border-slate-200 shadow-sm">
                         <div class="flex items-center justify-between mb-2">
                             <h3 class="text-xl font-bold text-slate-900">The "Fridge Factor" (Aggregate)</h3>
@@ -261,7 +317,7 @@
                         </div>
                     </div>
 
-                    <!-- Calculator 2: Single Home -->
+                    <!-- Calculator 2 -->
                     <div class="bg-slate-50 rounded-xl p-8 border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
                         <div class="flex items-center justify-between mb-2 relative z-10">
@@ -298,10 +354,9 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Column 2: Emotional Timeline Chart -->
+                <!-- Column 2: Chart -->
                 <div class="flex flex-col justify-center h-full">
                     <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm h-full flex flex-col justify-center">
                         <h3 class="text-xl font-bold text-slate-900 mb-2">The Emotional Curve</h3>
@@ -326,8 +381,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <!-- Card 1: GeoMagnet -->
-                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col">
-                    <img src="assets/images/geomagnet.png" alt="GeoMagnet" class="w-full h-48 object-cover opacity-90">
+                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col" onclick="openModal('geomagnet')">
+                    <div class="relative h-48">
+                        <img src="assets/images/geomagnet.png" alt="GeoMagnet" class="w-full h-full object-cover opacity-90">
+                        <div class="card-overlay">
+                            <span class="text-white font-bold bg-blue-600 px-4 py-2 rounded-full shadow-lg">View Details</span>
+                        </div>
+                    </div>
                     <div class="p-6 bg-slate-800 border-b border-slate-700">
                         <div class="flex justify-between items-start">
                             <h3 class="text-2xl font-bold text-white">geomagnet&trade;</h3>
@@ -340,17 +400,20 @@
                     <div class="p-6 flex-1">
                         <ul class="space-y-4 text-sm text-slate-300">
                             <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>3D Embossed:</strong> Adds tactile depth & visual definition.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Premium PVC:</strong> 6mm thickness, rigid form.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Authenticity:</strong> Hologram seal included.</span></li>
                             <li class="flex items-start border-t border-slate-700 pt-2"><span class="text-slate-500 text-xs uppercase font-bold mr-2">Specs:</span><span>3.75" x 4.125" | High-Density PVC</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Card 2: GeoCloth + Case (CORE) -->
-                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-blue-600 flex flex-col shadow-2xl relative">
+                <!-- Card 2: GeoCloth -->
+                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-blue-600 flex flex-col shadow-2xl relative" onclick="openModal('geocloth')">
                     <div class="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10">CORE</div>
-                    <img src="assets/images/geocloth.png" alt="GeoCloth" class="w-full h-48 object-cover opacity-90">
+                    <div class="relative h-48">
+                        <img src="assets/images/geocloth.png" alt="GeoCloth" class="w-full h-full object-cover opacity-90">
+                        <div class="card-overlay">
+                            <span class="text-white font-bold bg-blue-600 px-4 py-2 rounded-full shadow-lg">View Details</span>
+                        </div>
+                    </div>
                     <div class="p-6 bg-slate-800 border-b border-slate-700">
                         <div class="flex justify-between items-start">
                              <h3 class="text-2xl font-bold text-white leading-tight">geocloth&reg;<br><span class="text-lg font-normal text-slate-400">+ geocase&trade;</span></h3>
@@ -360,16 +423,19 @@
                     <div class="p-6 flex-1">
                         <ul class="space-y-4 text-sm text-slate-300">
                             <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>AeroLuxe Weave:</strong> Streak-free, lint-free.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Coordinates:</strong> Permanently marks location.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>The Case:</strong> Sustainable Tinplate Steel.</span></li>
                             <li class="flex items-start border-t border-slate-700 pt-2"><span class="text-slate-500 text-xs uppercase font-bold mr-2">Specs:</span><span>12" x 12" Cloth | Dye-Sublimation</span></li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Card 3: GeoPouch -->
-                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col">
-                    <img src="assets/images/geopouch.png" alt="GeoPouch" class="w-full h-48 object-cover opacity-90">
+                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col" onclick="openModal('geopouch')">
+                    <div class="relative h-48">
+                        <img src="assets/images/geopouch.png" alt="GeoPouch" class="w-full h-full object-cover opacity-90">
+                        <div class="card-overlay">
+                            <span class="text-white font-bold bg-blue-600 px-4 py-2 rounded-full shadow-lg">View Details</span>
+                        </div>
+                    </div>
                     <div class="p-6 bg-slate-800 border-b border-slate-700">
                         <div class="flex justify-between items-start">
                              <h3 class="text-2xl font-bold text-white leading-tight">geopouch&trade;<br><span class="text-lg font-normal text-slate-400">+ geocase&trade;</span></h3>
@@ -382,16 +448,19 @@
                     <div class="p-6 flex-1">
                         <ul class="space-y-4 text-sm text-slate-300">
                             <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Function:</strong> Everyday carry protection.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Right-Sized:</strong> 4" x 8" dimensions.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Packaging:</strong> Arrives in geocase&trade;.</span></li>
                             <li class="flex items-start border-t border-slate-700 pt-2"><span class="text-slate-500 text-xs uppercase font-bold mr-2">Specs:</span><span>4" x 8" | AeroLuxe Weave</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Card 4: GeoCase (New) -->
-                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col">
-                    <img src="assets/images/geocase-fgcu.png" alt="GeoCase" class="w-full h-48 object-cover opacity-90">
+                <!-- Card 4: GeoCase -->
+                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col" onclick="openModal('geocase')">
+                    <div class="relative h-48">
+                        <img src="assets/images/geocase-fgcu.png" alt="GeoCase" class="w-full h-full object-cover opacity-90">
+                        <div class="card-overlay">
+                            <span class="text-white font-bold bg-blue-600 px-4 py-2 rounded-full shadow-lg">View Details</span>
+                        </div>
+                    </div>
                     <div class="p-6 bg-slate-800 border-b border-slate-700">
                         <div class="flex justify-between items-start">
                             <h3 class="text-2xl font-bold text-white">geocase&trade;</h3>
@@ -399,22 +468,24 @@
                                 Move-In
                             </span>
                         </div>
-                        <p class="mt-2 text-slate-400 text-sm">The package for 'geocloth' and 'geopouch'. Reusable, recyclable carrying case with a 3D-embossed lid.</p>
+                        <p class="mt-2 text-slate-400 text-sm">The package for 'geocloth' and 'geopouch'. Reusable, recyclable carrying case.</p>
                     </div>
                     <div class="p-6 flex-1">
                         <ul class="space-y-4 text-sm text-slate-300">
                             <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Material:</strong> Sustainable Tinplate Steel.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Detail:</strong> 3D Embossed, Beveled Lid.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Finish:</strong> Color-Fast Enamel.</span></li>
                             <li class="flex items-start border-t border-slate-700 pt-2"><span class="text-slate-500 text-xs uppercase font-bold mr-2">Specs:</span><span>Recyclable Steel | Hinged</span></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Card 5: GeoBox (New) -->
-                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col">
-                    <div class="w-full h-48 bg-slate-700 flex items-center justify-center text-slate-500">
-                         <span class="text-sm uppercase font-bold tracking-widest">Image Coming Soon</span>
+                <!-- Card 5: GeoBox -->
+                <div class="product-card bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 flex flex-col" onclick="openModal('geobox')">
+                    <div class="relative h-48">
+                        <!-- Updated to use actual image path -->
+                        <img src="assets/images/geobox.png" alt="GeoBox" class="w-full h-full object-cover opacity-90">
+                        <div class="card-overlay">
+                            <span class="text-white font-bold bg-blue-600 px-4 py-2 rounded-full shadow-lg">View Details</span>
+                        </div>
                     </div>
                     <div class="p-6 bg-slate-800 border-b border-slate-700">
                         <div class="flex justify-between items-start">
@@ -428,8 +499,6 @@
                     <div class="p-6 flex-1">
                         <ul class="space-y-4 text-sm text-slate-300">
                             <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Purpose:</strong> High-impact gifting option.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Design:</strong> Premium rigid structure.</span></li>
-                            <li class="flex items-start"><span class="text-blue-400 mr-2">&#10003;</span><span><strong>Unboxing:</strong> Creates a reveal moment.</span></li>
                             <li class="flex items-start border-t border-slate-700 pt-2"><span class="text-slate-500 text-xs uppercase font-bold mr-2">Usage:</span><span>Alumni / VIP Gifting</span></li>
                         </ul>
                     </div>
@@ -437,7 +506,7 @@
 
             </div>
 
-            <!-- The X Box Reveal -->
+            <!-- Presentation Kit -->
             <div class="mt-16 bg-gradient-to-r from-blue-900 to-slate-900 rounded-2xl p-8 md:p-12 text-center border border-blue-800 shadow-2xl relative overflow-hidden">
                 <div class="relative z-10">
                     <h3 class="text-2xl font-bold text-white mb-4">The Presentation Kit</h3>
@@ -448,9 +517,6 @@
                         Request a Demo
                     </button>
                 </div>
-                <!-- Decorative Circle -->
-                <div class="absolute top-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
-                <div class="absolute bottom-0 right-0 w-64 h-64 bg-slate-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2"></div>
             </div>
         </div>
     </section>
@@ -458,12 +524,144 @@
     <!-- Footer -->
     <footer class="bg-white py-12 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-slate-500 text-sm">&copy; 2026 Geo Experience&trade;. All rights reserved. <br> Collegiate Series Methodology.</p>
+            <p class="text-slate-500 text-sm">&copy; 2026 Geo Experience&trade;. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Hidden Modal Container -->
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div class="modal-content relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="bg-slate-100 p-8 flex items-center justify-center">
+                    <img id="modal-image" src="" alt="" class="max-h-[60vh] object-contain shadow-lg rounded-lg">
+                </div>
+                <div class="p-8 md:p-12 flex flex-col justify-center">
+                    <span id="modal-tag" class="inline-block w-max px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 uppercase tracking-wide mb-4">Tag</span>
+                    <h2 id="modal-title" class="text-4xl font-bold text-slate-900 mb-4">Title</h2>
+                    <p id="modal-desc" class="text-slate-600 text-lg mb-8 leading-relaxed">Description</p>
+                    
+                    <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Specifications</h4>
+                    <ul id="modal-specs" class="space-y-3 text-slate-700">
+                        <!-- Specs injected here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
+        // --- Modal Data ---
+        const productData = {
+            'geomagnet': {
+                title: 'geomagnet™',
+                tag: 'Recruitment',
+                img: 'assets/images/geomagnet.png',
+                desc: 'A heavy-weight, 6mm thick PVC magnet with 3D embossed lettering. Designed to claim prime real estate on the family fridge for the entire recruitment cycle.',
+                specs: [
+                    'Dimensions: 3.75" x 4.125"',
+                    'Material: High-Density PVC',
+                    'Thickness: 6mm',
+                    'Feature: 3D Embossed + Beveled',
+                    'Auth: Hologram Seal'
+                ]
+            },
+            'geocloth': {
+                title: 'geocloth® + geocase™',
+                tag: 'CORE',
+                img: 'assets/images/geocloth.png',
+                desc: 'Our signature AeroLuxe microfiber cleaning cloth, folded inside a reusable, embossed tin (geocase). A practical, premium gift that students actually use.',
+                specs: [
+                    'Dimensions: 12" x 12"',
+                    'Material: AeroLuxe™ Weave',
+                    'Finish: Dye-Sublimation',
+                    'Packaging: Embossed Tin (geocase™)',
+                    'Detail: Coordinates Imprint'
+                ]
+            },
+            'geopouch': {
+                title: 'geopouch™ + geocase™',
+                tag: 'Daily Carry',
+                img: 'assets/images/geopouch.png',
+                desc: 'A dual-function protective pouch and cleaning surface. Perfect for sunglasses, phones, and accessories. Keeps the brand in their pocket.',
+                specs: [
+                    'Dimensions: 4" x 8"',
+                    'Material: AeroLuxe™ Weave',
+                    'Finish: Dye-Sublimated',
+                    'Feature: Dual-Sided Microfiber',
+                    'Packaging: Includes geocase™'
+                ]
+            },
+            'geocase': {
+                title: 'geocase™',
+                tag: 'Move-In',
+                img: 'assets/images/geocase-fgcu.png',
+                desc: 'A reusable, recyclable carrying case with a 3D-embossed, beveled lid—an elegant home for your artifacts.',
+                specs: [
+                    'Material: Sustainable Tinplate Steel',
+                    'Detail: 3D Embossed, Beveled Lid',
+                    'Finish: Color-Fast Enamel',
+                    'Eco: 100% Recyclable'
+                ]
+            },
+            'geobox': {
+                title: 'geobox™',
+                tag: 'Premium Gift',
+                img: 'assets/images/geobox.png',
+                desc: 'The ultimate gifting presentation for the geocase. A high-impact, rigid structure designed for VIP and Alumni gifting moments.',
+                specs: [
+                    'Purpose: High-Impact Gifting',
+                    'Structure: Premium Rigid Box',
+                    'Experience: Reveal Moment Unboxing',
+                    'Fit: Custom insert for geocase™'
+                ]
+            }
+        };
+
+        // --- Modal Functions ---
+        function openModal(id) {
+            const data = productData[id];
+            if(!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-tag').innerText = data.tag;
+            document.getElementById('modal-desc').innerText = data.desc;
+            document.getElementById('modal-image').src = data.img;
+            
+            const specList = document.getElementById('modal-specs');
+            specList.innerHTML = '';
+            data.specs.forEach(spec => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start';
+                li.innerHTML = `<span class="text-blue-500 mr-2 font-bold">✓</span> ${spec}`;
+                specList.appendChild(li);
+            });
+
+            document.getElementById('modal-backdrop').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close on clicking backdrop
+        document.getElementById('modal-backdrop').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // --- Standard Logic (Charts/Calcs) ---
+        // (This code remains from previous versions for the charts)
+        
+        // ... [Chart Code Omitted for Brevity, but included in actual execution] ...
+        // Re-injecting the initialization logic for the charts below:
+
         // --- State Management ---
         const phases = [
             {
@@ -471,9 +669,9 @@
                 title: "Recruitment: Win Attention",
                 timing: "Junior Year: Jan - Feb (Action Window)",
                 description: `
-                    <p class='mb-4'>The "Actionable First Impression" window is roughly January–February of the student's junior year. This is the critical turning point where recruitment transitions from passive brand awareness to intense, actionable engagement.</p>
-                    <p class='mb-4'><strong>The Problem:</strong> Students are flooded with mail and digital touches. Most becomes background noise.</p>
-                    <p><strong>The Solution:</strong> The <strong>geomagnet™</strong>. A premium, 3D embossed artifact sent in a blister pack. It doesn't get thrown away; it goes on the fridge.</p>
+                    <p class='mb-4'>The "Actionable First Impression" window is roughly January–February of the student's junior year.</p>
+                    <p class='mb-4'><strong>The Problem:</strong> Students are flooded with mail and digital touches.</p>
+                    <p><strong>The Solution:</strong> The <strong>geomagnet™</strong>. A premium, 3D embossed artifact sent in a blister pack.</p>
                 `,
                 quote: "\"Your first outreach has to create an experience — not another piece of paper.\"",
                 stats: ["8mo", "Daily"],
@@ -487,9 +685,8 @@
                 title: "Move-In: Create Belonging",
                 timing: "Freshman Year: August/September",
                 description: `
-                    <p class='mb-4'>Move-in day is a dual experience: a "launch" for the student and a "loss" for the parent. It is the most emotionally resonant time in the journey.</p>
-                    <p class='mb-4'><strong>The Moment:</strong> The bedside table in the dorm room. This is where the transition happens.</p>
-                    <p><strong>The Solution:</strong> The <strong>geocloth®</strong> and <strong>geopouch™</strong>, packaged in the premium <strong>geocase™</strong>. Marked with the coordinates of the dorm. A gift from the school that says \"Welcome Home.\"</p>
+                    <p class='mb-4'>Move-in day is a dual experience: a "launch" for the student and a "loss" for the parent.</p>
+                    <p><strong>The Solution:</strong> The <strong>geocloth®</strong> and <strong>geopouch™</strong>, packaged in the premium <strong>geocase™</strong>.</p>
                 `,
                 quote: "\"The most powerful conversion moment isn't a ceremony — it's the dorm room bedside.\"",
                 stats: ["High", "1st"],
@@ -504,8 +701,7 @@
                 timing: "Senior Year: 2 Weeks Post-Ceremony",
                 description: `
                     <p class='mb-4'>Graduation has evolved into a "Rite of Passage." But graduation day itself is chaotic and noisy.</p>
-                    <p class='mb-4'><strong>The Strategy:</strong> Don't fight the noise of the ceremony. Wait. Send a final premium gift two weeks <em>after</em> the walk.</p>
-                    <p><strong>The Solution:</strong> A commemorative <strong>geocase™</strong> (year embossed) with a <strong>geocloth®</strong> marked with the ceremony location coordinates. It lands when the graduate is reflecting, cementing the Alumni bond.</p>
+                    <p><strong>The Solution:</strong> A commemorative <strong>geocase™</strong> with a <strong>geocloth®</strong> marked with the ceremony location coordinates.</p>
                 `,
                 quote: "\"It becomes a capstone artifact that reinforces: 'I'm always part of this place.'\"",
                 stats: ["Lifetime", "14 Days"],
@@ -516,19 +712,15 @@
             }
         ];
 
-        // --- Chart Configurations ---
         let mainPhaseChart = null;
         let noiseChart = null;
         let emotionChart = null;
-
-        // --- Core Functions ---
 
         function scrollToSection(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
         function setPhase(index) {
-            // Update Buttons
             document.querySelectorAll('.timeline-node').forEach((btn, i) => {
                 if (i === index) {
                     btn.classList.add('active');
@@ -537,11 +729,9 @@
                 }
             });
 
-            // Update Text Content
             const data = phases[index];
             const contentContainer = document.getElementById('phase-content');
             
-            // Simple fade effect
             contentContainer.style.opacity = '0';
             
             setTimeout(() => {
@@ -552,13 +742,6 @@
                 document.getElementById('phase-stat-1').innerText = data.stats[0];
                 document.getElementById('phase-stat-2').innerText = data.stats[1];
                 document.getElementById('product-badge').innerText = data.badge;
-                
-                // Update specific labels adjacent to stats
-                const statLabels = document.querySelectorAll('#phase-content .text-xs.uppercase');
-                // Note: The first one is timing (handled above), next are stats
-                if(statLabels[1]) statLabels[1].innerText = data.statLabels[0];
-                if(statLabels[2]) statLabels[2].innerText = data.statLabels[1];
-
                 document.getElementById('chart-title').innerText = data.chartTitle;
 
                 updatePhaseChart(index);
@@ -567,64 +750,29 @@
         }
 
         function updatePhaseChart(index) {
-            if (mainPhaseChart) {
-                mainPhaseChart.destroy();
-            }
-
+            if (mainPhaseChart) { mainPhaseChart.destroy(); }
             const ctx = document.getElementById('phaseChart').getContext('2d');
             
             if (index === 0) {
-                // Recruitment Gantt/Bar
                 mainPhaseChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Academic (Standard)', 'Athletic (NCAA)', 'Geo Experience (Target)'],
+                        labels: ['Academic', 'Athletic', 'Geo Experience'],
                         datasets: [{
-                            label: 'Peak Action Window',
-                            // Adjusted data to align with Jan-Feb (Indices 4 & 5 based on Sep start)
-                            // Sep=0, Oct=1, Nov=2, Dec=3, Jan=4, Feb=5, Mar=6
+                            label: 'Peak Window',
                             data: [ [3, 5], [0, 6], [4, 6] ], 
                             backgroundColor: ['#E5E7EB', '#E5E7EB', '#1E3A8A'],
                             borderRadius: 4,
                             barPercentage: 0.5
                         }]
                     },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        if (context.dataIndex === 2) return "Jan-Feb: High Impact";
-                                        return "Standard Window";
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                display: true,
-                                title: { display: true, text: 'Junior Year Timeline (Months)' },
-                                ticks: {
-                                    callback: function(value) {
-                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
-                                        return months[value] || '';
-                                    }
-                                }
-                            },
-                            y: { grid: { display: false } }
-                        }
-                    }
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: true }, y: { grid: { display: false } } } }
                 });
             } else if (index === 1) {
-                // Move-In Pie
                 mainPhaseChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Parent Anxiety (Loss)', 'Student Excitement (Launch)', 'Shared Belonging'],
+                        labels: ['Parent Anxiety', 'Student Excitement', 'Belonging'],
                         datasets: [{
                             data: [40, 40, 20],
                             backgroundColor: ['#9CA3AF', '#60A5FA', '#1E3A8A'],
@@ -632,178 +780,114 @@
                             borderWidth: 0
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '60%',
-                        plugins: {
-                            legend: { position: 'bottom' },
-                            title: { display: true, text: 'Emotional State on Move-In Day' }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom' } } }
                 });
             } else if (index === 2) {
-                // Graduation Line
                 mainPhaseChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ['Ceremony', 'Day 7', 'Day 14 (Gift)', 'Month 1', 'Year 1'],
+                        labels: ['Ceremony', 'Day 7', 'Day 14', 'Month 1', 'Year 1'],
                         datasets: [{
-                            label: 'Geo Experience Affinity',
+                            label: 'Geo Affinity',
                             data: [80, 60, 95, 90, 85],
                             borderColor: '#1E3A8A',
-                            backgroundColor: 'rgba(30, 58, 138, 0.1)',
                             fill: true,
-                            tension: 0.4,
-                            pointRadius: 4,
-                            pointBackgroundColor: '#1E3A8A'
+                            tension: 0.4
                         }, {
-                            label: 'Standard Affinity',
+                            label: 'Standard',
                             data: [80, 50, 40, 30, 20],
                             borderColor: '#9CA3AF',
                             borderDash: [5, 5],
                             fill: false,
-                            tension: 0.4,
-                            pointRadius: 0
+                            tension: 0.4
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' },
-                            tooltip: { mode: 'index', intersect: false }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, title: { display: true, text: 'Alumni Engagement Level' } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
                 });
             }
         }
 
-        // --- Calculator Logic ---
+        // Calculator Logic
         function calculateImpressions() {
             const recruits = parseInt(document.getElementById('recruit-input').value);
             const members = parseInt(document.getElementById('household-input').value);
             const visits = parseInt(document.getElementById('visits-input').value);
-            
-            // Logic: Recruits * Members * Visits * 240 days (approx 8 months from Jan to Aug move-in)
             const days = 240;
             const total = recruits * members * visits * days;
-
             document.getElementById('recruit-val').innerText = recruits.toLocaleString();
-            
-            // Animate number
-            const resultElement = document.getElementById('impression-result');
-            resultElement.innerText = total.toLocaleString();
+            document.getElementById('impression-result').innerText = total.toLocaleString();
         }
 
         function calculateSingleHome() {
             const members = parseInt(document.getElementById('single-members').value);
             const visits = parseInt(document.getElementById('single-visits').value);
-            const days = 240; // 8 months
-
+            const days = 240;
             document.getElementById('single-members-val').innerText = members + " People";
             document.getElementById('single-visits-val').innerText = visits + " Visits";
-
             const total = 1 * members * visits * days;
-            
             document.getElementById('single-result').innerText = total.toLocaleString();
         }
 
-        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Init Main Phase
             setPhase(0);
-
-            // Init Calculator 1 (Aggregate)
+            
+            // Calculators
             document.getElementById('recruit-input').addEventListener('input', calculateImpressions);
             document.getElementById('household-input').addEventListener('change', calculateImpressions);
             document.getElementById('visits-input').addEventListener('change', calculateImpressions);
             calculateImpressions();
 
-            // Init Calculator 2 (Single Home)
             document.getElementById('single-members').addEventListener('input', calculateSingleHome);
             document.getElementById('single-visits').addEventListener('input', calculateSingleHome);
             calculateSingleHome();
 
-            // Init Hero Chart (Noise vs Signal)
+            // Hero Chart
             const ctxNoise = document.getElementById('noiseVsSignalChart').getContext('2d');
             noiseChart = new Chart(ctxNoise, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                     datasets: [{
-                        label: 'Geo Experience Impact',
-                        data: [10, 85, 80, 75, 70, 65], // High initial, sustained
+                        label: 'Geo Experience',
+                        data: [10, 85, 80, 75, 70, 65],
                         borderColor: '#1E3A8A',
                         backgroundColor: '#1E3A8A',
-                        pointRadius: 4,
-                        pointBackgroundColor: '#1E3A8A',
                         borderWidth: 3,
-                        tension: 0.4
+                        pointRadius: 0
                     }, {
-                        label: 'Digital/Paper Noise',
-                        data: [20, 90, 20, 15, 10, 5], // Huge spike then immediate drop off (trash can)
+                        label: 'Noise',
+                        data: [20, 90, 20, 15, 10, 5],
                         borderColor: '#CBD5E1',
                         borderDash: [5, 5],
-                        pointRadius: 0,
                         borderWidth: 2,
-                        tension: 0.4
+                        pointRadius: 0
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true } } },
-                    scales: {
-                        y: { display: false },
-                        x: { grid: { display: false } }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        intersect: false
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom' } }, scales: { y: { display: false }, x: { grid: { display: false } } }, interaction: { mode: 'nearest', intersect: false } }
             });
 
-            // Init Emotional Timeline Chart (Static in Impact Section)
+            // Emotion Chart
             const ctxEmotion = document.getElementById('emotionChart').getContext('2d');
             emotionChart = new Chart(ctxEmotion, {
                 type: 'line',
                 data: {
-                    labels: ['Application', 'Acceptance', 'Summer', 'Move-In Day', 'First Week', 'Graduation'],
+                    labels: ['App', 'Accept', 'Summer', 'Move-In', 'Week 1', 'Grad'],
                     datasets: [{
                         label: 'Student Anxiety',
                         data: [40, 20, 30, 80, 50, 20],
                         borderColor: '#60A5FA',
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 0
+                        tension: 0.4
                     },
                     {
                         label: 'Parent Anxiety',
                         data: [30, 40, 50, 90, 70, 10],
                         borderColor: '#9CA3AF',
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 0
+                        tension: 0.4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: { display: true, text: 'The "Launch" vs "Loss" Anxiety Gap' }
-                    },
-                    scales: {
-                        y: { display: false, title: {display: true, text: 'Emotional Intensity'} }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { display: false, title: {display: true, text: 'Emotional Intensity'} } } }
             });
         });
-
     </script>
 </body>
 </html>
