@@ -26,7 +26,7 @@
 
         .timeline-node {
             transition: all 0.3s ease;
-            color: #64748B; /* Default Slate-500 */
+            color: #64748B;
         }
         
         /* Force White Text on Active State */
@@ -38,7 +38,6 @@
             box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.3);
         }
         
-        /* Target the spans inside to ensure they turn white too */
         .timeline-node.active span {
             color: white !important;
         }
@@ -74,12 +73,12 @@
             opacity: 1;
         }
 
-        /* Modal Styles - UPDATED FOR LARGER SIZE */
+        /* Modal Styles - SUPER SIZED */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(6px); /* Increased blur for focus */
+            background: rgba(15, 23, 42, 0.85); /* Darker backdrop */
+            backdrop-filter: blur(8px);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -97,26 +96,27 @@
         .modal-content {
             background: white;
             border-radius: 1rem;
-            /* Significantly increased width constraints for "2x larger" feel */
-            width: 95%;
-            max-width: 1400px; 
-            /* Increased max-height to accommodate larger images */
-            max-height: 95vh;
+            /* Massive Size settings */
+            width: 95vw;
+            max-width: 1600px; 
+            height: 90vh;
             overflow-y: auto;
             transform: scale(0.95);
             transition: transform 0.3s ease;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 1024px) {
+            .modal-content {
+                flex-direction: row;
+                overflow: hidden; /* Prevent body scroll if content fits */
+            }
         }
 
         .modal-backdrop.open .modal-content {
             transform: scale(1);
-        }
-
-        /* Modal Image Styling for Impact */
-        #modal-image {
-            width: 100%;
-            max-height: 80vh; /* Allow image to be very tall */
-            object-fit: contain;
         }
 
         /* Range Slider Styling */
@@ -179,6 +179,7 @@
         <!-- Decorative bg block -->
         <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-slate-100 flex items-center justify-center border-l border-slate-100">
             <div class="p-8 text-center w-full max-w-lg">
+                <!-- Title layout preserved as requested -->
                 <h3 class="text-2xl font-bold text-slate-400 mb-4">The "Noise" vs. The Experience</h3>
                 <div class="chart-container" style="max-height: 300px;">
                     <canvas id="noiseVsSignalChart"></canvas>
@@ -203,6 +204,7 @@
                 <!-- Connecting Line -->
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 transform -translate-y-1/2 rounded"></div>
                 
+                <!-- Updated Buttons: Removed inline text color so active state works -->
                 <button onclick="setPhase(0)" id="btn-phase-0" class="timeline-node active flex flex-col items-center group bg-white border-4 border-slate-200 rounded-full w-24 h-24 justify-center shadow-sm cursor-pointer hover:border-blue-400">
                     <span class="text-2xl font-bold mb-1">01</span>
                     <span class="text-xs font-semibold uppercase">Recruit</span>
@@ -524,9 +526,9 @@
                     <p class="text-lg text-blue-200 max-w-2xl mx-auto mb-8">
                         All of this lives inside the "X Box" — a comprehensive presentation kit showcasing the full journey.
                     </p>
-                    <button class="bg-white text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+                    <a href="mailto:hello@geoexperience.com?subject=Requesting a Geo Experience Demo" class="inline-block bg-white text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
                         Request a Demo
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -547,17 +549,19 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <div class="grid grid-cols-1 md:grid-cols-2 h-full">
-                <div class="bg-slate-100 p-8 flex items-center justify-center h-full">
-                    <img id="modal-image" src="" alt="" class="max-h-[80vh] w-full object-contain shadow-lg rounded-lg">
+            <div class="grid grid-cols-1 lg:grid-cols-2 h-full">
+                <!-- Image Section - Full Height, Centered -->
+                <div class="bg-slate-100 p-8 flex items-center justify-center h-1/2 lg:h-full">
+                    <img id="modal-image" src="" alt="" class="max-h-full max-w-full object-contain shadow-2xl rounded-lg">
                 </div>
-                <div class="p-8 md:p-12 flex flex-col justify-center h-full overflow-y-auto">
+                <!-- Content Section -->
+                <div class="p-8 lg:p-16 flex flex-col justify-center h-1/2 lg:h-full overflow-y-auto">
                     <div>
-                        <span id="modal-tag" class="inline-block w-max px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 uppercase tracking-wide mb-4">Tag</span>
-                        <h2 id="modal-title" class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">Title</h2>
-                        <p id="modal-desc" class="text-slate-600 text-lg md:text-xl mb-10 leading-relaxed">Description</p>
+                        <span id="modal-tag" class="inline-block w-max px-4 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-800 uppercase tracking-wide mb-6">Tag</span>
+                        <h2 id="modal-title" class="text-4xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">Title</h2>
+                        <p id="modal-desc" class="text-slate-600 text-xl lg:text-2xl mb-10 leading-relaxed font-light">Description</p>
                         
-                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Specifications</h4>
+                        <h4 class="text-lg font-bold text-slate-900 uppercase tracking-wider mb-6 border-b pb-2">Specifications</h4>
                         <ul id="modal-specs" class="space-y-4 text-slate-700 text-lg">
                             <!-- Specs injected here -->
                         </ul>
@@ -651,7 +655,7 @@
             data.specs.forEach(spec => {
                 const li = document.createElement('li');
                 li.className = 'flex items-start';
-                li.innerHTML = `<span class="text-blue-500 mr-2 font-bold">✓</span> ${spec}`;
+                li.innerHTML = `<span class="text-blue-500 mr-2 font-bold text-xl">✓</span> ${spec}`;
                 specList.appendChild(li);
             });
 
@@ -664,16 +668,12 @@
             document.body.style.overflow = '';
         }
 
-        // Close on clicking backdrop
         document.getElementById('modal-backdrop').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
 
-        // --- Standard Logic (Charts/Calcs) ---
-        // (This code remains from previous versions for the charts)
-        
-        // ... [Chart Code Omitted for Brevity, but included in actual execution] ...
-        // Re-injecting the initialization logic for the charts below:
+        // --- Global Month Data ---
+        const monthLabels = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
 
         // --- State Management ---
         const phases = [
@@ -788,25 +788,15 @@
                             tooltip: {
                                 callbacks: {
                                     title: function(context) {
-                                        // Fix for Tooltip Title
-                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
-                                        // The 'label' property of context comes from x-axis ticks
-                                        // but for 'indexAxis: y', the x-axis is numeric (0-7).
-                                        // We need to map the numeric value back to month string.
-                                        // However, standard tooltip title is usually the Y-axis label (Category).
-                                        // The label we want to customize is the X-axis value shown in the body.
                                         return context[0].label;
                                     },
                                     label: function(context) {
-                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
                                         let label = context.dataset.label || '';
                                         if (label) {
                                             label += ': ';
                                         }
-                                        // context.parsed.x gives the numeric value
-                                        // Map start and end values to months
-                                        const start = months[context.parsed._custom.start];
-                                        const end = months[context.parsed._custom.end];
+                                        const start = monthLabels[context.raw[0]];
+                                        const end = monthLabels[context.raw[1]];
                                         return label + start + ' - ' + end;
                                     }
                                 }
@@ -818,10 +808,9 @@
                                 min: 0,
                                 max: 7,
                                 ticks: {
-                                    stepSize: 1, // Force integers so callback works
+                                    stepSize: 1,
                                     callback: function(value) {
-                                        const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
-                                        return months[value] || '';
+                                        return monthLabels[value] || '';
                                     }
                                 }
                             }, 
@@ -892,7 +881,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             setPhase(0);
             
-            // Calculators
             document.getElementById('recruit-input').addEventListener('input', calculateImpressions);
             document.getElementById('household-input').addEventListener('change', calculateImpressions);
             document.getElementById('visits-input').addEventListener('change', calculateImpressions);
@@ -902,7 +890,6 @@
             document.getElementById('single-visits').addEventListener('input', calculateSingleHome);
             calculateSingleHome();
 
-            // Hero Chart
             const ctxNoise = document.getElementById('noiseVsSignalChart').getContext('2d');
             noiseChart = new Chart(ctxNoise, {
                 type: 'line',
@@ -914,7 +901,7 @@
                         borderColor: '#1E3A8A',
                         backgroundColor: '#1E3A8A',
                         borderWidth: 3,
-                        pointRadius: 4  // RESTORED: Points are now visible
+                        pointRadius: 4
                     }, {
                         label: 'Noise',
                         data: [20, 90, 20, 15, 10, 5],
@@ -927,7 +914,6 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom' } }, scales: { y: { display: false }, x: { grid: { display: false } } }, interaction: { mode: 'nearest', intersect: false } }
             });
 
-            // Emotion Chart
             const ctxEmotion = document.getElementById('emotionChart').getContext('2d');
             emotionChart = new Chart(ctxEmotion, {
                 type: 'line',
